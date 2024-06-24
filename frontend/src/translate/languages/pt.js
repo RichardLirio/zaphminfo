@@ -38,6 +38,12 @@ const messages = {
           perDay: {
             title: "Tickets de hoje: ",
           },
+          perYear:{
+            title: "Total de Tickets neste ano: "
+          },
+          perMonth:{
+            title: "Total de Tickets no Mês selecionado: "
+          }
         },
         messages: {
           inAttendance: {

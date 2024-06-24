@@ -14,6 +14,10 @@ import { i18n } from "../../translate/i18n";
 
 import Chart from "./Chart"
 
+import ChartYear from "./ChartYear"
+
+import ChartMonth from "./ChartMonth"
+
 const useStyles = makeStyles(theme => ({
 	container: {
 		paddingTop: theme.spacing(4),
@@ -106,6 +110,16 @@ const Dashboard = () => {
 					<Grid item xs={12}>
 						<Paper className={classes.fixedHeightPaper}>
 							<Chart />
+						</Paper>
+					</Grid>
+					<Grid item xs={12}>
+						<Paper className={classes.fixedHeightPaper}>
+							<ChartMonth />
+						</Paper>
+					</Grid>
+					<Grid item xs={12}>
+						<Paper className={classes.fixedHeightPaper}>
+							<ChartYear />
 						</Paper>
 					</Grid>
 				</Grid>
