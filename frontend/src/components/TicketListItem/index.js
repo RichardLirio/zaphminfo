@@ -91,6 +91,17 @@ const useStyles = makeStyles(theme => ({
 		left: "50%",
 	},
 
+	user: {
+		left: "60%",
+		bottom: "70%",
+		position: "absolute",
+	},
+
+	badgeUserStyle: {
+		color: "white",
+		backgroundColor: "#C44342",
+	},
+
 	ticketQueueColor: {
 		flex: "none",
 		width: "8px",
@@ -123,12 +134,29 @@ const TicketListItem = ({ ticket }) => {
 	const { ticketId } = useParams();
 	const isMounted = useRef(true);
 	const { user } = useContext(AuthContext);
+	const [usuarios, setUsuarios] = useState([]);
+	
+
+	
+	
+	
+	  
 
 	useEffect(() => {
+		const fetchTicket = async () => {
+			try {
+				const { data } = await api.get("/tickets/" + ticket.id);
+				setUsuarios(data.user)
+			} catch (err) {
+				setLoading(false);
+				toastError(err);
+			}
+			};
+		 fetchTicket();
 		return () => {
 			isMounted.current = false;
 		};
-	}, []);
+	}, [ticket]);
 
 	const handleAcepptTicket = async id => {
 		setLoading(true);
@@ -150,7 +178,6 @@ const TicketListItem = ({ ticket }) => {
 	const handleSelectTicket = id => {
 		history.push(`/tickets/${id}`);
 	};
-
 	return (
 		<React.Fragment key={ticket.id}>
 			<ListItem
@@ -250,6 +277,15 @@ const TicketListItem = ({ ticket }) => {
 					>
 						{i18n.t("ticketsList.buttons.accept")}
 					</ButtonWithSpinner>
+				)}
+				{ticket.status === "open" &&(
+					<Badge
+					className={classes.user}
+					badgeContent={usuarios.name}
+					classes={{
+						badge: classes.badgeUserStyle,
+					}}
+				/>
 				)}
 			</ListItem>
 			<Divider variant="inset" component="li" />

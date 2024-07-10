@@ -20,41 +20,41 @@ const ChartMonth = () => {
 	const theme = useTheme();
 
 	const date = useRef(new Date().toISOString());
-	const { tickets } = useTickets({ date: date.current });
+	const { tickets } = useTickets({ showAll: true , status:"closed"});
 	const [mes,setMesdata]= useState("01");
 
 	const [chartData, setChartData,] = useState([
-		{ time: "01", amount: 0 },
-		{ time: "02", amount: 0 },
-		{ time: "03", amount: 0 },
-		{ time: "04", amount: 0 },
-		{ time: "05", amount: 0 },
-		{ time: "06", amount: 0 },
-		{ time: "07", amount: 0 },
-		{ time: "08", amount: 0 },
-		{ time: "09", amount: 0 },
-		{ time: "10", amount: 0 },
-		{ time: "11", amount: 0 },
-		{ time: "12", amount: 0 },
-		{ time: "13", amount: 0 },
-		{ time: "14", amount: 0 },
-		{ time: "15", amount: 0 },
-		{ time: "16", amount: 0 },
-		{ time: "17", amount: 0 },
-		{ time: "18", amount: 0 },
-		{ time: "19", amount: 0 },
-		{ time: "20", amount: 0 },
-		{ time: "21", amount: 0 },
-		{ time: "22", amount: 0 },
-		{ time: "23", amount: 0 },
-		{ time: "24", amount: 0 },
-		{ time: "25", amount: 0 },
-		{ time: "26", amount: 0 },
-		{ time: "27", amount: 0 },
-		{ time: "28", amount: 0 },
-		{ time: "29", amount: 0 },
-		{ time: "30", amount: 0 },
-		{ time: "31", amount: 0 },
+		{ dia: "01", amount: 0 },
+		{ dia: "02", amount: 0 },
+		{ dia: "03", amount: 0 },
+		{ dia: "04", amount: 0 },
+		{ dia: "05", amount: 0 },
+		{ dia: "06", amount: 0 },
+		{ dia: "07", amount: 0 },
+		{ dia: "08", amount: 0 },
+		{ dia: "09", amount: 0 },
+		{ dia: "10", amount: 0 },
+		{ dia: "11", amount: 0 },
+		{ dia: "12", amount: 0 },
+		{ dia: "13", amount: 0 },
+		{ dia: "14", amount: 0 },
+		{ dia: "15", amount: 0 },
+		{ dia: "16", amount: 0 },
+		{ dia: "17", amount: 0 },
+		{ dia: "18", amount: 0 },
+		{ dia: "19", amount: 0 },
+		{ dia: "20", amount: 0 },
+		{ dia: "21", amount: 0 },
+		{ dia: "22", amount: 0 },
+		{ dia: "23", amount: 0 },
+		{ dia: "24", amount: 0 },
+		{ dia: "25", amount: 0 },
+		{ dia: "26", amount: 0 },
+		{ dia: "27", amount: 0 },
+		{ dia: "28", amount: 0 },
+		{ dia: "29", amount: 0 },
+		{ dia: "30", amount: 0 },
+		{ dia: "31", amount: 0 },
 	]);
 
 
@@ -65,6 +65,21 @@ const ChartMonth = () => {
 			<select name="selectedFruit" value={mes}
 			onChange={e => {
 				setMesdata(e.target.value);
+				setChartData(prevState => {
+					let aux = [...prevState];
+					let year = format(startOfMonth(parseISO(date.current)), "yyyy");
+		
+					aux.forEach(a => {
+						tickets.forEach(ticket => {
+							if (format(startOfDay(parseISO(ticket.createdAt)),"dd/MM/yyyy") === (a.dia+"/"+mes+"/"+year) )
+								{
+									a.amount = 0;
+								}
+						});
+						
+					});
+					return aux;
+				});
 				}}>
 			  <option value="01">January</option>
 			  <option value="02">February</option>
@@ -85,8 +100,10 @@ const ChartMonth = () => {
 
 			aux.forEach(a => {
 				tickets.forEach(ticket => {
-					format(startOfDay(parseISO(ticket.createdAt)),"dd/MM/yyyy") === (a.time+"/"+mes+"/"+year) ?
-						a.amount++ : a.amount = 0;
+					if (format(startOfDay(parseISO(ticket.createdAt)),"dd/MM/yyyy") === (a.dia+"/"+mes+"/"+year) )
+						{
+							a.amount++ ;
+						}
 				});
 				
 			});
@@ -100,25 +117,6 @@ const ChartMonth = () => {
 			
 		);}
 
-	// useEffect(() => {
-		
-	// 	setChartData(prevState => {
-	// 		let aux = [...prevState];
-	// 		let year = format(startOfMonth(parseISO(date.current)), "yyyy");
-
-	// 		aux.forEach(a => {
-	// 			tickets.forEach(ticket => {
-	// 				format(startOfDay(parseISO(ticket.createdAt)),"dd/MM/yyyy") === (a.time+"/"+"/"+year) &&
-	// 					a.amount++;
-	// 			});
-	// 		});
-
-	// 		return aux;
-	// 	});
-	// }, [tickets]);
-
-	
-	
 
 	return (
 		<React.Fragment>
@@ -138,7 +136,7 @@ const ChartMonth = () => {
 					}}
 				>
 					<CartesianGrid strokeDasharray="3 3" />
-					<XAxis dataKey="time" stroke={theme.palette.text.secondary} />
+					<XAxis dataKey="dia" stroke={theme.palette.text.secondary} />
 					<YAxis
 						type="number"
 						allowDecimals={false}

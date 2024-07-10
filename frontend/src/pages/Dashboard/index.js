@@ -18,6 +18,8 @@ import ChartYear from "./ChartYear"
 
 import ChartMonth from "./ChartMonth"
 
+import UserChart from "./UsersChart"
+
 const useStyles = makeStyles(theme => ({
 	container: {
 		paddingTop: theme.spacing(4),
@@ -51,7 +53,7 @@ const Dashboard = () => {
 
 	const { user } = useContext(AuthContext);
 	var userQueueIds = [];
-
+	
 	if (user.queues && user.queues.length > 0) {
 		userQueueIds = user.queues.map(q => q.id);
 	}
@@ -120,6 +122,11 @@ const Dashboard = () => {
 					<Grid item xs={12}>
 						<Paper className={classes.fixedHeightPaper}>
 							<ChartYear />
+						</Paper>
+					</Grid>
+					<Grid item xs={12}>
+						<Paper className={classes.fixedHeightPaper}>
+							<UserChart />
 						</Paper>
 					</Grid>
 				</Grid>

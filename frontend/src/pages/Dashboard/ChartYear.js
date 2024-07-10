@@ -8,6 +8,7 @@ import {
 	YAxis,
 	Label,
 	ResponsiveContainer,
+	Tooltip
 } from "recharts";
 import { parseISO, format , startOfMonth} from "date-fns";
 
@@ -20,24 +21,22 @@ const ChartYear = () => {
 	const theme = useTheme();
 
 	const date = useRef(new Date().toISOString());
-	const { tickets } = useTickets({ date: date.current });
-	
+	const { tickets } = useTickets({ showAll: true, status:"closed" });
 
 	const [chartData, setChartData] = useState([
-		{ time: "January", amount: 0 },
-		{ time: "February", amount: 0 },
-		{ time: "March", amount: 0 },
-		{ time: "April", amount: 0 },
-		{ time: "March", amount: 0 },
-		{ time: "June", amount: 0 },
-		{ time: "July", amount: 0 },
-		{ time: "August", amount: 0 },
-		{ time: "September", amount: 0 },
-		{ time: "October", amount: 0 },
-		{ time: "November", amount: 0 },
-		{ time: "December", amount: 0 },
+		{ time: "January", tickets: 0 },
+		{ time: "February", tickets: 0 },
+		{ time: "March", tickets: 0 },
+		{ time: "April", tickets: 0 },
+		{ time: "March", tickets: 0 },
+		{ time: "June", tickets: 0 },
+		{ time: "July", tickets: 0 },
+		{ time: "August", tickets: 0 },
+		{ time: "September", tickets: 0 },
+		{ time: "October", tickets: 0 },
+		{ time: "November", tickets: 0 },
+		{ time: "December", tickets: 0 },
 	]);
-	
 
 	useEffect(() => {
 		setChartData(prevState => {
@@ -47,7 +46,7 @@ const ChartYear = () => {
 			aux.forEach(a => {
 				tickets.forEach(ticket => {
 					format(startOfMonth(parseISO(ticket.createdAt)), "MMMM/yyyy") === (a.time +"/"+year) &&
-						a.amount++;
+						a.tickets++;
 				});
 			});
 
@@ -88,7 +87,8 @@ const ChartYear = () => {
 							Tickets
 						</Label>
 					</YAxis>
-					<Bar dataKey="amount" fill={theme.palette.primary.main} />
+					<Tooltip />
+					<Bar dataKey="tickets" fill={theme.palette.primary.main} />
 				</BarChart>
 			</ResponsiveContainer>
 		</React.Fragment>

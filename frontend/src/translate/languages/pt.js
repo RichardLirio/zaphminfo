@@ -39,10 +39,10 @@ const messages = {
             title: "Tickets de hoje: ",
           },
           perYear:{
-            title: "Total de Tickets neste ano: "
+            title: "Total de Tickets Fechados neste Ano: "
           },
           perMonth:{
-            title: "Total de Tickets no Mês selecionado: "
+            title: "Total de Tickets Por Dia no Mês selecionado: "
           }
         },
         messages: {
