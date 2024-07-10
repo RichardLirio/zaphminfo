@@ -3,12 +3,12 @@
 	"name": "Ticketz HM Sistemas",
 	"icons": [
 		{
-			"src": "favicon.ico",
+			"src": "HM.ico",
 			"sizes": "64x64 32x32 24x24 16x16",
 			"type": "image/x-icon"
 		},
 		{
-			"src": "/android-chrome-192x192.png",
+			"src": "/hmtecnologia.png",
 			"sizes": "192x192",
 			"type": "image/png"
 		}
