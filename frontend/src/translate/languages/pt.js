@@ -81,7 +81,7 @@ const messages = {
           disconnected: {
             title: "Falha ao iniciar sessão do WhatsApp",
             content:
-              "Certifique-se de que seu celular esteja conectado à internet e tente novamente, ou solicite um novo QR Code",
+              "Certifique-se de que seu celular esteja conectado à internet e tente novamente, ou solicite um novo QR Code.",
           },
           qrcode: {
             title: "Esperando leitura do QR Code",
