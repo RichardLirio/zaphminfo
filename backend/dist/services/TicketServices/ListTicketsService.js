@@ -84,7 +84,7 @@ const ListTicketsService = ({ searchParam = "", pageNumber = "1", queueIds, stat
             unreadMessages: { [sequelize_1.Op.gt]: 0 }
         };
     }
-    const limit = 999;
+    const limit = 9999;
     const offset = limit * (+pageNumber - 1);
     const { count, rows: tickets } = yield Ticket_1.default.findAndCountAll({
         where: whereCondition,
