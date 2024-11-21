@@ -31,7 +31,7 @@ import whatsBackground from "../../assets/wa-background.png";
 import api from "../../services/api";
 import toastError from "../../errors/toastError";
 
-import {CSVLink} from 'react-csv';
+import { CSVLink } from "react-csv";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 
@@ -42,6 +42,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     flexGrow: 1,
+    ticketNunber: {
+      color: "#808888",
+      padding: 8,
+    },
   },
 
   messagesList: {
@@ -263,13 +267,13 @@ const useStyles = makeStyles((theme) => ({
     padding: 10,
   },
   box: {
-		position: "relative",
+    position: "relative",
     marginLeft: "2px",
     marginRight: "2px",
     [theme.breakpoints.down("sm")]: {
-      display: "none"
+      display: "none",
     },
-	},
+  },
 }));
 
 const reducer = (state, action) => {
@@ -427,39 +431,47 @@ const MessagesList = ({ ticketId, isGroup }) => {
   };
 
   const checkMessageMedia = (message) => {
-    if(message.mediaType === "location" && message.body.split('|').length >= 2) {
-      let locationParts = message.body.split('|')
-      let imageLocation = locationParts[0]		
-      let linkLocation = locationParts[1]
-      
-      let descriptionLocation = null
-      
-      if(locationParts.length > 2)
-        descriptionLocation = message.body.split('|')[2]
-      
-      return <LocationPreview image={imageLocation} link={linkLocation} description={descriptionLocation} />
-    }
-	  else if (message.mediaType === "vcard") {
-		//console.log("vcard")
-		//console.log(message)
-		let array = message.body.split("\n");
-		let obj = [];
-		let contact = "";
-		for (let index = 0; index < array.length; index++) {
-			const v = array[index];
-			let values = v.split(":");
-			for (let ind = 0; ind < values.length; ind++) {
-				if (values[ind].indexOf("+") !== -1) {
-					obj.push({ number: values[ind] });
-				}
-				if (values[ind].indexOf("FN") !== -1) {
-					contact = values[ind + 1];
-				}
-			}
-		}
-		return <VcardPreview contact={contact} numbers={obj[0].number} />
-	} 
-  /*else if (message.mediaType === "multi_vcard") {
+    if (
+      message.mediaType === "location" &&
+      message.body.split("|").length >= 2
+    ) {
+      let locationParts = message.body.split("|");
+      let imageLocation = locationParts[0];
+      let linkLocation = locationParts[1];
+
+      let descriptionLocation = null;
+
+      if (locationParts.length > 2)
+        descriptionLocation = message.body.split("|")[2];
+
+      return (
+        <LocationPreview
+          image={imageLocation}
+          link={linkLocation}
+          description={descriptionLocation}
+        />
+      );
+    } else if (message.mediaType === "vcard") {
+      //console.log("vcard")
+      //console.log(message)
+      let array = message.body.split("\n");
+      let obj = [];
+      let contact = "";
+      for (let index = 0; index < array.length; index++) {
+        const v = array[index];
+        let values = v.split(":");
+        for (let ind = 0; ind < values.length; ind++) {
+          if (values[ind].indexOf("+") !== -1) {
+            obj.push({ number: values[ind] });
+          }
+          if (values[ind].indexOf("FN") !== -1) {
+            contact = values[ind + 1];
+          }
+        }
+      }
+      return <VcardPreview contact={contact} numbers={obj[0].number} />;
+    } else if (message.mediaType === "image") {
+      /*else if (message.mediaType === "multi_vcard") {
 		console.log("multi_vcard")
 		console.log(message)
 		
@@ -476,7 +488,6 @@ const MessagesList = ({ ticketId, isGroup }) => {
 			)
 		} else return (<></>)
 	}*/
-  else if (message.mediaType === "image") {
       return <ModalImageCors imageUrl={message.mediaUrl} />;
     } else if (message.mediaType === "audio") {
       return (
@@ -568,6 +579,22 @@ const MessagesList = ({ ticketId, isGroup }) => {
     }
   };
 
+  const renderNumberTicket = (message, index) => {
+    if (index < messagesList.length && index > 0) {
+      let messageTicket = message.ticketId;
+      let previousMessageTicket = messagesList[index - 1].ticketId;
+
+      if (messageTicket !== previousMessageTicket) {
+        return (
+          <div key={`ticket-${message.id}`} className={classes.ticketNunber}>
+            #ticket: {messageTicket}
+            <hr />
+          </div>
+        );
+      }
+    }
+  };
+
   const renderMessageDivider = (message, index) => {
     if (index < messagesList.length && index > 0) {
       let messageUser = messagesList[index].fromMe;
@@ -613,6 +640,7 @@ const MessagesList = ({ ticketId, isGroup }) => {
             <React.Fragment key={message.id}>
               {renderDailyTimestamps(message, index)}
               {renderMessageDivider(message, index)}
+              {renderNumberTicket(message, index)}
               <div className={classes.messageLeft}>
                 <IconButton
                   variant="contained"
@@ -629,9 +657,9 @@ const MessagesList = ({ ticketId, isGroup }) => {
                     {message.contact?.name}
                   </span>
                 )}
-                {(message.mediaUrl || message.mediaType === "vcard" 
-                //|| message.mediaType === "multi_vcard" 
-                ) && checkMessageMedia(message)}
+                {(message.mediaUrl || message.mediaType === "vcard") &&
+                  //|| message.mediaType === "multi_vcard"
+                  checkMessageMedia(message)}
                 <div className={classes.textContentItem}>
                   {message.quotedMsg && renderQuotedMessage(message)}
                   <MarkdownWrapper>{message.body}</MarkdownWrapper>
@@ -647,6 +675,7 @@ const MessagesList = ({ ticketId, isGroup }) => {
             <React.Fragment key={message.id}>
               {renderDailyTimestamps(message, index)}
               {renderMessageDivider(message, index)}
+              {renderNumberTicket(message, index)}
               <div className={classes.messageRight}>
                 <IconButton
                   variant="contained"
@@ -658,9 +687,9 @@ const MessagesList = ({ ticketId, isGroup }) => {
                 >
                   <ExpandMore />
                 </IconButton>
-                {(message.mediaUrl || message.mediaType === "vcard" 
-                //|| message.mediaType === "multi_vcard" 
-                ) && checkMessageMedia(message)}
+                {(message.mediaUrl || message.mediaType === "vcard") &&
+                  //|| message.mediaType === "multi_vcard"
+                  checkMessageMedia(message)}
                 <div
                   className={clsx(classes.textContentItem, {
                     [classes.textContentItemDeleted]: message.isDeleted,
@@ -694,24 +723,46 @@ const MessagesList = ({ ticketId, isGroup }) => {
   return (
     <div className={classes.messagesListWrapper}>
       <Box className={classes.box}>
-      <Grid container spacing={0} style={{ display:'flex', alignItems:'center', textAlign: 'center', backgroundColor:'#ebebeb', paddingBottom:'10px'}}>
-        <Grid item xs={12} md={3} sm={4}>
+        <Grid
+          container
+          spacing={0}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            textAlign: "center",
+            backgroundColor: "#ebebeb",
+            paddingBottom: "10px",
+          }}
+        >
+          <Grid item xs={12} md={3} sm={4}></Grid>
+          <Grid item xs={12} md={3} sm={4}></Grid>
+          <Grid item xs={12} md={3} sm={4}></Grid>
+          <Grid item xs={12} md={3} sm={4}>
+            <CSVLink
+              style={{ textDecoration: "none", backgroundColor: "#ebebeb" }}
+              separator=";"
+              filename={"ticketexport.csv"}
+              data={messagesList.map((message) => ({
+                body: message.body,
+                id: message.id,
+                fromMe: message.fromMe,
+                quoted: message.quotedMsg,
+                isDel: message.isDeleted,
+                mediaUrl: message.mediaUrl,
+                type: message.mediaType,
+                created: message.createdAt,
+              }))}
+            >
+              <Button
+                style={{ fontSize: "10px" }}
+                variant="contained"
+                color="primary"
+              >
+                EXPORTAR CONVERSAS
+              </Button>
+            </CSVLink>
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={3} sm={4}>
-        </Grid>
-        <Grid item xs={12} md={3} sm={4}>
-        </Grid>
-        <Grid item xs={12} md={3} sm={4}>
-          <CSVLink style={{ textDecoration:'none', backgroundColor:'#ebebeb'}} separator=";" filename={"ticketexport.csv"} data={messagesList.map((message) => ({ body: message.body, id: message.id, fromMe: message.fromMe, quoted : message.quotedMsg, isDel: message.isDeleted, mediaUrl : message.mediaUrl, type: message.mediaType, created : message.createdAt}))}>
-            <Button
-            style={{fontSize:"10px"}}
-            variant="contained"
-            color="primary">
-              EXPORTAR CONVERSAS
-            </Button>
-          </CSVLink>
-        </Grid>
-      </Grid>
       </Box>
       <MessageOptionsMenu
         message={selectedMessage}
