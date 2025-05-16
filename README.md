@@ -34,9 +34,6 @@ cd zaphminfo
 🐳 Subindo a aplicação com Docker
 Após clonar o repositório, basta executar:
 
-bash
-Copiar
-Editar
 docker-compose up -d
 Esse comando irá:
 
@@ -48,10 +45,9 @@ Iniciar a aplicação no ambiente de desenvolvimento.
 
 Aguarde alguns segundos e acesse:
 
-arduino
-Copiar
-Editar
 http://localhost
+
+
 🧠 Sobre a Aplicação
 📱 Atendimento via WhatsApp: conecte seu número e centralize o suporte ao cliente.
 
