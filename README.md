@@ -31,10 +31,22 @@ A aplicação permite que operadores acessem e respondam mensagens via painel we
 ```bash
 git clone https://github.com/RichardLirio/zaphminfo
 cd zaphminfo
+
+# Backend
+cd backend
+cp .env.example .env
+cd ..
+
+# Frontend
+cd frontend
+cp .env.example .env
+cd ..
+
 🐳 Subindo a aplicação com Docker
 Após clonar o repositório, basta executar:
 
 docker-compose up -d
+
 Esse comando irá:
 
 Criar os containers do banco de dados, backend e frontend.
@@ -45,7 +57,7 @@ Iniciar a aplicação no ambiente de desenvolvimento.
 
 Aguarde alguns segundos e acesse:
 
-http://localhost
+http://localhost:8080
 
 
 🧠 Sobre a Aplicação
@@ -60,7 +72,8 @@ http://localhost
 🔐 Login e controle de usuários: acesso protegido para operadores.
 
 🔒 HTTPS (opcional)
-Se desejar rodar a aplicação com HTTPS e domínio real, recomendamos configurar um proxy reverso com Nginx e certificados Let's Encrypt.
+Se desejar rodar a aplicação com HTTPS e domínio real, recomendamos configurar um proxy reverso com Nginx e certificados Lets Encrypt.
+
 Fale conosco para um exemplo de produção com isso pronto.
 
 📁 Estrutura dos Diretórios
