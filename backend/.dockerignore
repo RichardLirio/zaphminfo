@@ -1,0 +1,8 @@
+node_modules
+Dockerfile
+docker-compose.yml
+.dockerignore
+.git
+/src/config/sentry.js
+.wwebjs_auth
+.wwebjs_cache
