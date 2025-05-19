@@ -4,6 +4,15 @@ FROM node:18
 # Diretório de trabalho dentro do container
 WORKDIR /app
 
+# Copia apenas os arquivos de dependência primeiro (para aproveitar o cache)
+COPY package*.json ./
+
+# Instala as dependências
+RUN npm install
+
+# Copia o restante dos arquivos da aplicação
+COPY . .
+
 # Instala dependências do sistema e Chrome
 RUN apt-get update && apt-get install -y \
     wget \
@@ -23,30 +32,22 @@ RUN apt-get update && apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     xdg-utils \
+    netcat-openbsd \
     --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
 
 # Adiciona o repositório do Chrome e instala
 RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
-apt-get update && apt-get install -y google-chrome-stable && \
-rm -rf /var/lib/apt/lists/*
+    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
+    apt-get update && apt-get install -y google-chrome-stable && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copia os arquivos de dependência
-COPY package*.json ./
-
-# Instala as dependências
-RUN npm install
-
-# Copia o restante dos arquivos
-COPY . .
-
+# Copia o entrypoint e dá permissão de execução
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
-
-# Expõe a porta (ajuste conforme necessário)
+# Expõe a porta
 EXPOSE 8000
 
-# Comando padrão (será substituído no compose por um script de entrada)
+# Comando padrão
 CMD ["/app/entrypoint.sh"]

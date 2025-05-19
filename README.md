@@ -45,6 +45,7 @@ cd ..
 🐳 Subindo a aplicação com Docker
 Após clonar o repositório, basta executar:
 
+docker-compose build --no-cache
 docker-compose up -d
 
 Esse comando irá:

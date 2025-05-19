@@ -9,6 +9,9 @@ done
 
 echo "✅ Banco de dados disponível!"
 
+# Entra na pasta da aplicação
+cd /app
+
 # Roda migrations apenas se houver pendências
 if npx sequelize-cli db:migrate:status | grep -q 'down'; then
   echo "🛠 Executando migrations..."
