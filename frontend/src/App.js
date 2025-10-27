@@ -21,7 +21,7 @@ const App = () => {
         },
       },
       palette: {
-        primary: { main: "#C44342" },
+        primary: { main: "#4E71FF" },
         secondary: { main: "#4B70F5" },
       },
     },
